@@ -1,8 +1,16 @@
 package com.linneaus.portal.entities;
 
-import javax.persistence.*;
 import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "Therapy_List")
 public class TherapyList {
@@ -20,44 +28,4 @@ public class TherapyList {
 
     @OneToMany(mappedBy = "therapyList")
     private List<Therapy> therapies;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDosage() {
-        return dosage;
-    }
-
-    public void setDosage(String dosage) {
-        this.dosage = dosage;
-    }
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
-    }
-
-    public List<Therapy> getTherapies() {
-        return therapies;
-    }
-
-    public void setTherapies(List<Therapy> therapies) {
-        this.therapies = therapies;
-    }
 }

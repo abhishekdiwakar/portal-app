@@ -15,12 +15,12 @@ import lombok.Data;
 @Entity
 @Table(name = "User")
 public class User {
-
   @Id
-  @Column(name = "userID")
+  @Column(name="userID")
   private Long userId;
 
   private String username;
+
   private String email;
 
   @ManyToOne
@@ -39,4 +39,7 @@ public class User {
 
   @OneToMany(mappedBy = "doctor")
   private List<Therapy> therapies;
+
+  @OneToMany(mappedBy = "patient")
+  private List<Therapy> patientTherapies;
 }

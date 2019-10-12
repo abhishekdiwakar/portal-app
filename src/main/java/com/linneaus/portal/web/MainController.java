@@ -1,12 +1,20 @@
 package com.linneaus.portal.web;
 
-import com.linneaus.portal.model.youtube.Item;
+import com.linneaus.portal.model.Channel;
+import com.linneaus.portal.model.Item;
 import com.linneaus.portal.model.youtube.Videos;
 import com.linneaus.portal.service.FacebookService;
 import com.linneaus.portal.service.GithubService;
 import com.linneaus.portal.service.SecurityService;
 import com.linneaus.portal.service.SpotifyService;
+import com.linneaus.portal.service.UserService;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +40,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -47,9 +56,11 @@ import org.springframework.web.client.RestTemplate;
 @Log4j2
 @Controller
 public class MainController {
-
   @Value("${youtube.parkinson.video.url}")
   private String YOUTUBE_PARKINSON_VIDEO_URL;
+
+  @Value("${feeds.api.url}")
+  private static String FEEDS_API_URL;
 
   @Autowired
   private SecurityService securityService;
@@ -71,6 +82,9 @@ public class MainController {
 
   @Autowired
   AuthenticationFailureHandler failureHandler;
+
+  @Autowired
+  private UserService userService;
 
   @Autowired
   RestTemplate restTemplate;
@@ -121,12 +135,31 @@ public class MainController {
 
   @GetMapping("/doctorHomePage")
   public String doctorHome(ModelMap model, HttpServletRequest req) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    model.addAttribute("username", authUser.getUsername());
+    model.addAttribute("patientsData", userService.getPatientData(authUser.getUsername()));
     return "doctorHome";
   }
 
   @GetMapping("/researcherHomePage")
   public String researcherHome(Model model) {
+    Channel channels = new Channel();
+    try {
+      try (XmlReader reader = new XmlReader(new URL(FEEDS_API_URL))) {
+        SyndFeed feed = new SyndFeedInput().build(reader);
+        List<Item> items = new ArrayList<>();
+        for (SyndEntry entry : feed.getEntries()) {
+          items.add(new Item(entry.getTitle(), entry.getDescription().getValue(), entry.getLink(), entry.getComments(), entry.getUri(), entry.getPublishedDate().toString()));
+        }
+        channels = new Channel(feed.getTitle(), feed.getDescription(), feed.getLink(), feed.getLanguage(), feed.getAuthor(), items);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    model.addAttribute("username", authUser.getUsername());
+    model.addAttribute("patientsData", userService.getPatientData(authUser.getUsername()));
+    model.addAttribute("channels", channels);
     return "researcherHome";
   }
 
@@ -173,7 +206,6 @@ public class MainController {
       try {
         failureHandler.onAuthenticationFailure(request, response, exception);
       } catch (IOException | ServletException se) {
-        //ignore
       }
       log.error("An exception occurred while authenticating the user {}", exception);
       throw exception;
