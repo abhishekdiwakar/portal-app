@@ -14,10 +14,10 @@ import org.springframework.web.client.RestTemplate;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthSuccessHandler authenticationSuccessHandler;
 
     @Autowired
-    private CustomAuthenticationFailureHandler authenticationFailureHandle;
+    private AuthFailureHandler authenticationFailureHandle;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

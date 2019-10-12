@@ -15,21 +15,23 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 
-<body style="text-align: center; margin: 0 auto;">
-<h1>Assignment 2: Authentication service and access roles</h1>
+<body style="text-align: left; margin: 15px; background-color: #ffffff">
+<h1>Portal Application</h1>
 <span>${message}</span>
 <div style="margin: 0 auto;">
-    Doctor's Login
+    Patient Login
     <a href="${facebookUrl}">
         <img style="margin-top: 18px; width: 235px;" src="./resources/img/facebookloginbutton.png"/>
     </a>
 </div>
 <div style="margin: 0 auto;">
+    Researcher
     <a href="${spotifyUrl}">
         <img style="margin-top: 18px; width: 250px;" src="./resources/img/spotifyloginbutton.png"/>
     </a>
 </div>
 <div style="margin: 0 auto;">
+    Physician
     <a href="${githubUrl}">
         <img style="margin-top: 18px; width: 250px;" src="./resources/img/githubloginbutton.png"/>
     </a>

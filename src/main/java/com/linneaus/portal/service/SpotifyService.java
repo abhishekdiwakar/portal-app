@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 public class SpotifyService {
 
   @Value("${spotify.application.id}")
-  public static String SPOTIFY_APPLICATION_ID;
+  private String SPOTIFY_APPLICATION_ID;
 
   @Value("${spotify.application.secret}")
-  public static String SPOTIFY_APPLICATION_SECRET;
+  private String SPOTIFY_APPLICATION_SECRET;
 
   @Value("${spotify.redirect.url}")
-  public static String SPOTIFY_REDIRECT_URI;
+  private String SPOTIFY_REDIRECT_URI;
 
 
   public String getSpotifyAuthUrl() {

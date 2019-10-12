@@ -19,7 +19,7 @@ import java.util.Set;
 
 
 @Configuration
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 

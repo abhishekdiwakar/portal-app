@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Patient's Home</title>
+    <title>Patient</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -24,7 +24,7 @@
         <c:forEach items="${videos}" var="video" varStatus="id">
             <tr style="padding: 10px;">
                 <td>
-                    <img src="${video.snippet.thumbnails.medium.url}" width="${video.snippet.thumbnails.medium.width}" height="${video.snippet.thumbnails.medium.height}" />
+                    <img src="${video.snippet.thumbnails.default.url}" width="${video.snippet.thumbnails.default.width}" height="${video.snippet.thumbnails.default.height}" />
                 </td>
                 <td>
                     <span>${video.snippet.title}</span>
